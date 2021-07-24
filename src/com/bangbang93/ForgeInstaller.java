@@ -1,7 +1,6 @@
 package com.bangbang93;
 
 import net.minecraftforge.installer.SimpleInstaller;
-import net.minecraftforge.installer.actions.ActionCanceledException;
 import net.minecraftforge.installer.actions.ClientInstall;
 import net.minecraftforge.installer.actions.ProgressCallback;
 import net.minecraftforge.installer.json.Util;
