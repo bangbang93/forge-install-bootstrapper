@@ -60,15 +60,19 @@ public class ForgeInstaller {
     ClientInstall action = (ClientInstall) Class.forName("net.minecraftforge.installer.actions.ClientInstall")
       .getConstructor(installerClass, ProgressCallback.class).newInstance(install, monitor);
     Method[] methods = ClientInstall.class.getMethods();
+    String installerPath = SimpleInstaller.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     Predicate<String> optionals = (a) -> true;
     Object result = null;
     for (Method method : methods) {
       if (method.getName().equals("run")) {
         if (method.getParameters().length == 2) {
-          result = method.invoke(action, new File(path), optionals);
+          if (method.getParameters()[1].getType().equals(Predicate.class)) {
+            result = method.invoke(action, new File(path), optionals);
+          } else {
+            result = method.invoke(action, new File(path), new File(installerPath));
+          }
         } else {
-          String p = SimpleInstaller.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-          result = method.invoke(action, new File(path), optionals, new File(p));
+          result = method.invoke(action, new File(path), optionals, new File(installerPath));
         }
       }
     }
